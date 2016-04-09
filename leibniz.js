@@ -14,11 +14,24 @@ function smatch1(pattern, target) {
 }
 
 function smatch(pattern, target, table) {
-    table = table || {}
-
-    // .... your code here ...
-    
-    return null;
+  table = table || {}
+	
+  if (typeof pattern === "number" && pattern !== target)
+		return null;
+	else if (typeof pattern === "string" && string !== target)
+		return null;
+	else if (typeof pattern === "string" && (pattern[pattern.length - 1] === '?'))
+		table[pattern.slice(0, (pattern.length - 1))] = target;
+  else{
+		if (!(pattern instanceof Array &&  // pattern and
+               target instanceof Array &&   // target are arrays
+               pattern.length === target.length &&    // of the same length
+               pattern.every(function(elem, index) {  // and recursively
+                   return smatch(elem, target[index], table); // contain same elems
+               }))) return null;
+	}
+  
+	return table;
 }
 
 var diffPowerRule = {
