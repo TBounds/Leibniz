@@ -21,7 +21,7 @@ function smatch(pattern, target, table) {
       return null;
   }
 	else if (typeof pattern === "string"){
-    if(pattern[pattern.length - 1] === '?'))
+    if(pattern[pattern.length - 1] === '?')
       table[pattern.slice(0, (pattern.length - 1))] = target;
     else if(!(pattern === target))
       return null
