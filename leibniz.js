@@ -12,6 +12,28 @@ function smatch1(pattern, target) {
                    return smatch1(elem, target[index]); // contain same elems
                });
 }
+/*
+function smatch(pattern, target, table) {
+  table = table || {}
+	
+  if (typeof pattern === "number" && pattern !== target)
+		return null;
+	else if (typeof pattern === "string" && string !== target)
+		return null;
+	else if (typeof pattern === "string" && (pattern[pattern.length - 1] === '?'))
+		table[pattern.slice(0, (pattern.length - 1))] = target;
+  else{
+		if (!(pattern instanceof Array &&  // pattern and
+               target instanceof Array &&   // target are arrays
+               pattern.length === target.length &&    // of the same length
+               pattern.every(function(elem, index) {  // and recursively
+                   return smatch(elem, target[index], table); // contain same elems
+               }))) return null;
+	}
+  
+	return table;
+}
+*/
 
 function smatch(pattern, target, table) {
   table = table || {}
@@ -38,6 +60,9 @@ function smatch(pattern, target, table) {
 	return table;
 }
 
+//
+// d/dx u(x)^ n = n * u(x)^n-1 * d/dx u(x)
+//
 var diffPowerRule = {
     pattern : function(target, table) {
         return smatch(['DERIV', ['^', 'E?', 'N?'], 'V?'], target, table) &&
@@ -70,10 +95,11 @@ var diffXRule = {
 var diffSumRule = {
     pattern: function(target, table) {
         // ...your code here...
-        return false;
+        return smatch(['DERIV', ['+', 'U?', 'V?'], 'X?'], target, table);
     },
     transform: function(table) {
         // ...your code here...
+        return ['+', table.U, table.V];
     },
     label: "diffSumRule"
 };
