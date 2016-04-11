@@ -99,7 +99,7 @@ var diffSumRule = {
     },
     transform: function(table) {
         // ...your code here...
-        return ['+', table.U, table.V];
+        return ['+', ['DERIV', table.U, table.X], ['DERIV', table.V, table.X]];
     },
     label: "diffSumRule"
 };
