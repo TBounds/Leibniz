@@ -184,12 +184,15 @@ var expt0Rule = {
     label: "expt0Rule"
 };
 
+
+
 //
 //  x^1 = x
 //
 var expt1Rule = {
     pattern: function(target, table) {
-      return smatch(['^', 'X', '1'], target, table);
+      return smatch(['^', 'X?', 'N?'], target, table) &&
+        typeof table.N === "1";
     },
     transform: function(table) {
       return 'X';
