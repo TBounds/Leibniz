@@ -131,13 +131,13 @@ var foldBinopRule = {
     },
     transform: function(table) {
       if(table.O === '+') 
-        return ['+', table.N1, table.N2];        
+        return (table.N1 + table.N2);        
       if(table.O === '-') 
-        return ['-', table.N1, table.N2];
+        return (table.N1 - table.N2);
       if(table.O === '*') 
-        return ['*', table.N1, table.N2];        
+        return (table.N1 * table.N2);        
       if(table.O === '/') 
-        return ['/', table.N1, table.N2]; 
+        return (table.N1 / table.N2); 
     },
     label: "foldBinopRule"
 };
