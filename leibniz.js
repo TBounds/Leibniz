@@ -131,13 +131,13 @@ var diffConstRule = {
 
 //
 // (u v)' = uv' + vu'
-//
+// 4) ReferenceError: target is not defined
 var diffProductRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', ['*', 'U?', 'V?'], 'X?'], target, table);
     },
     transform: function(table) {
-        return [['+', ['*', table.U, ['DERIV', table.V, table.X]], ['*', table.V, ['DERIV', table.U, table.X]]], target, table];
+        return ['+', ['*', table.U, ['DERIV', table.V, table.X]], ['*', table.V, ['DERIV', table.U, table.X]]];
     },
     label: "diffProductRule"
 };
