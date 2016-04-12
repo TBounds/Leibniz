@@ -155,9 +155,9 @@ var foldCoeff1Rule = {
     },
     transform: function(table) {
       if(typeof table.E1 === "number")
-        return ['*', ['*', table.N, table.E1], table.E2];
+        return ['*', (table.N * table.E1), table.E2];
       else if(typeof table.E2 === "number")
-        return ['*', ['*', table.N, table.E2], table.E1];
+        return ['*', (table.N * table.E2), table.E1];
     },
     label: "foldCoeff1Rule"
 };
