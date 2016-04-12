@@ -12,28 +12,6 @@ function smatch1(pattern, target) {
                    return smatch1(elem, target[index]); // contain same elems
                });
 }
-/*
-function smatch(pattern, target, table) {
-  table = table || {}
-	
-  if (typeof pattern === "number" && pattern !== target)
-		return null;
-	else if (typeof pattern === "string" && string !== target)
-		return null;
-	else if (typeof pattern === "string" && (pattern[pattern.length - 1] === '?'))
-		table[pattern.slice(0, (pattern.length - 1))] = target;
-  else{
-		if (!(pattern instanceof Array &&  // pattern and
-               target instanceof Array &&   // target are arrays
-               pattern.length === target.length &&    // of the same length
-               pattern.every(function(elem, index) {  // and recursively
-                   return smatch(elem, target[index], table); // contain same elems
-               }))) return null;
-	}
-  
-	return table;
-}
-*/
 
 function smatch(pattern, target, table) {
   table = table || {}
@@ -145,10 +123,11 @@ var diffProductRule = {
 //
 // 3 + 4 = 7   (evaluate constant binary expressions)
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var foldBinopRule = {
     pattern: function(target, table) {
       return smatch(['+', 'N1?', 'N2?'], target, table) &&
-        table.N1 === "number" && table.N2 == "number";
+        typeof table.N1 === "number" && typeof table.N2 === "number";
     },
     transform: function(table) {
         return ['+', table.N1, table.N2];
@@ -215,13 +194,14 @@ var unityRule = {
 //
 // E * 0 = 0 * E = 0
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var times0Rule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['*', 'E?', 'N?'], target, table) &&
+        (typeof table.E === "number" && typeof table.N === "string") || (typeof table.E === "string" && typeof table.N === "numebr") 
     },
     transform: function(table) {
-        // ...your code here...
+        return 0;
     },
     label: "time0Rule"
 };
