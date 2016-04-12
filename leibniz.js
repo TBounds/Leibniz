@@ -123,7 +123,6 @@ var diffProductRule = {
 //
 // 3 + 4 = 7   (evaluate constant binary expressions)
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var foldBinopRule = {
     pattern: function(target, table) {
       return smatch(['O?', 'N1?', 'N2?'], target, table) &&
@@ -149,11 +148,16 @@ var foldBinopRule = {
 //
 var foldCoeff1Rule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['*', 'N?', ['*', 'E1?', 'E2?']], table, target) &&
+        typeof table.N === "number" && ((typeof table.E1 === "number" &&
+        typeof table.E2 === "string") || (typeof table.E1 === "string" &&
+        typeof table.E2 === "number"));
     },
     transform: function(table) {
-        // ...your code here...
+      if(table.E1 === "number")
+        return ['*', ['*', table.N, table.E1], table.E2];
+      else if(table.E2 === "number")
+        return ['*', ['*', table.N, table.E2], table.E1];
     },
     label: "foldCoeff1Rule"
 };
