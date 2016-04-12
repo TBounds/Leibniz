@@ -175,16 +175,14 @@ var foldCoeff1Rule = {
 //
 var expt0Rule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['^', 'X?', 'N?'], target, table) &&
+        typeof table.N === 0;
     },
     transform: function(table) {
-        // ...your code here...
+      return 1;
     },
     label: "expt0Rule"
 };
-
-
 
 //
 //  x^1 = x
@@ -192,7 +190,7 @@ var expt0Rule = {
 var expt1Rule = {
     pattern: function(target, table) {
       return smatch(['^', 'X?', 'N?'], target, table) &&
-        typeof table.N === "1";
+        typeof table.N === 1;
     },
     transform: function(table) {
       return 'X';
