@@ -193,13 +193,17 @@ var expt1Rule = {
 //
 //  E * 1 = 1 * E = 0 + E = E + 0 = E
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var unityRule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch[['O?', 'E?', 'N?'], target, table];
     },
     transform: function(table) {
-        // ...your code here...
+      if((table.O === '*' && ((typeof table.E !== "number" && table.N === 1) || 
+                              (table.E === 1 && typeof table.N !== "number"))) ||
+         (table.O === '+' && ((typeof table.E !== "number" && table.N === 0) ||
+                              (table.E === 0 && typeof table.N !== "number"))))
+        return table.E;
     },
     label: "unityRule"
 };
