@@ -126,11 +126,18 @@ var diffProductRule = {
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var foldBinopRule = {
     pattern: function(target, table) {
-      return smatch(['+', 'N1?', 'N2?'], target, table) &&
+      return smatch(['O?', 'N1?', 'N2?'], target, table) &&
         typeof table.N1 === "number" && typeof table.N2 === "number";
     },
     transform: function(table) {
-        return ['+', table.N1, table.N2];
+      if(table.O === '+') 
+        return ['+', table.N1, table.N2];        
+      if(table.O === '-') 
+        return ['-', table.N1, table.N2];
+      if(table.O === '*') 
+        return ['*', table.N1, table.N2];        
+      if(table.O === '/') 
+        return ['/', table.N1, table.N2]; 
     },
     label: "foldBinopRule"
 };
@@ -194,7 +201,6 @@ var unityRule = {
 //
 // E * 0 = 0 * E = 0
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var times0Rule = {
     pattern: function(target, table) {
       return smatch(['*', 'E?', 'N?'], target, table) &&
