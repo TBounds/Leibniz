@@ -196,7 +196,7 @@ var expt1Rule = {
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var unityRule = {
     pattern: function(target, table) {
-      return (smatch[['O?', 'E?', 'N?'], target, table] && 
+      return (smatch(['O?', 'E?', 'N?'], target, table) && 
       ((table.O === '*' && (table.E === 1 || table.N === 1)) ||
        (table.O === '+' && (table.E === 0 || table.N === 0))))      
     },
