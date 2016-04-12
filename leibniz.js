@@ -148,15 +148,15 @@ var foldBinopRule = {
 //
 var foldCoeff1Rule = {
     pattern: function(target, table) {
-      return smatch(['*', 'N?', ['*', 'E1?', 'E2?']], table, target) &&
+      return smatch(['*', 'N?', ['*', 'E1?', 'E2?']], target, table) &&
         typeof table.N === "number" && ((typeof table.E1 === "number" &&
         typeof table.E2 === "string") || (typeof table.E1 === "string" &&
         typeof table.E2 === "number"));
     },
     transform: function(table) {
-      if(table.E1 === "number")
+      if(typeof table.E1 === "number")
         return ['*', ['*', table.N, table.E1], table.E2];
-      else if(table.E2 === "number")
+      else if(typeof table.E2 === "number")
         return ['*', ['*', table.N, table.E2], table.E1];
     },
     label: "foldCoeff1Rule"
