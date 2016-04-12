@@ -94,11 +94,9 @@ var diffXRule = {
 //
 var diffSumRule = {
     pattern: function(target, table) {
-        // ...your code here...
         return smatch(['DERIV', ['+', 'U?', 'V?'], 'X?'], target, table);
     },
     transform: function(table) {
-        // ...your code here...
         return ['+', ['DERIV', table.U, table.X], ['DERIV', table.V, table.X]];
     },
     label: "diffSumRule"
@@ -109,11 +107,10 @@ var diffSumRule = {
 //
 var diffSubtractRule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['DERIV', ['-', 'U?', 'V?'], 'X?'], target, table);
     },
     transform: function(table) {
-        // ...your code here...
+        return ['-', ['DERIV', table.U, table.X], ['DERIV', table.V, table.X]];
     },
     label: "diffSubtractRule"
 };
@@ -137,11 +134,10 @@ var diffConstRule = {
 //
 var diffProductRule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['DERIV', ['*', 'U?', 'V?'], 'X?'], target, table);
     },
     transform: function(table) {
-        // ...your code here...
+        return [['+', ['*', table.U, ['DERIV', table.V, table.X]], ['*', table.V, ['DERIV', table.U, table.X]]], target, table];
     },
     label: "diffProductRule"
 };
