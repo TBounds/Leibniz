@@ -198,7 +198,7 @@ var unityRule = {
 var times0Rule = {
     pattern: function(target, table) {
       return smatch(['*', 'E?', 'N?'], target, table) &&
-        ((table.E === 0 && typeof table.N === "string") || (typeof table.E === "string" && table.N === 0)) 
+        ((table.E === 0 && typeof table.N !== "number") || (typeof table.E !== "number" && table.N === 0)) 
     },
     transform: function(table) {
         return 0;
