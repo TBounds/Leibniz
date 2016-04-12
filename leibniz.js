@@ -147,11 +147,11 @@ var diffProductRule = {
 //
 var foldBinopRule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      return smatch(['+', 'N1?', 'N2?'], target, table) &&
+        table.N1 === "number" && table.N2 == "number";
     },
     transform: function(table) {
-        // ...your code here...
+        return ['+', table.N1, table.N2];
     },
     label: "foldBinopRule"
 };
