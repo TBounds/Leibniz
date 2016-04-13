@@ -94,15 +94,18 @@ var diffSubtractRule = {
 };
 
 //
-// d/dt C = 1   (C does not depend on t)
+// d/dt C = 0   (C does not depend on t)
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var diffConstRule = {
     pattern: function(target, table) {
-        // ...your code here...
-        return false;
+      // (table.N.indexOf(table.V.toString()) < 0)
+      // smatch check for a number or check if the input contains the var
+    return smatch('DERIV', 'E?', 'V?') && (typeof table.E === "number" ||
+      (table.E.indexOf(table.V.toString()) < 0));
     },
     transform: function(table) {
-        // ...your code here...
+        return 0;
     },
     label: "diffConstRule"
 };
@@ -193,7 +196,6 @@ var expt1Rule = {
 //
 //  E * 1 = 1 * E = 0 + E = E + 0 = E
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var unityRule = {
     pattern: function(target, table) {
       return (smatch(['O?', 'E?', 'N?'], target, table) && 
@@ -255,6 +257,7 @@ function tryRule(rule, expr) {
 // If any rules fire, we return the new transformed expression;
 // Otherwise, null is returned.
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 function tryAllRules(expr) {
     var rules = [
         diffPowerRule,
