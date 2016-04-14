@@ -96,7 +96,6 @@ var diffSubtractRule = {
 //
 // d/dt C = 0   (C does not depend on t)
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var diffConstRule = {
     pattern: function(target, table) {
       // (table.N.indexOf(table.V.toString()) < 0)
@@ -259,13 +258,34 @@ function tryRule(rule, expr) {
 //
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 function tryAllRules(expr) {
+  
+    var anyFired = false;
     var rules = [
         diffPowerRule,
         diffXRule,
-        // ... your code here ...
+        diffConstRule,
+        diffProductRule,
+        diffPowerRule,
+        expt0Rule,
+        expt1Rule,
+        unityRule,
+        time0Rule,
+        foldBinopRule,
+        foldCoeff1Rule
     ];
-    // ... your code here ...
-    return null;
+    
+    rules.forEach((function(rule) {
+      var newExpr = tryRule(rule, expr);
+      if(newExpr !== null){
+        expr = newExpr;
+        anyFired = true;
+      }
+    });
+    
+    if(anyFired)
+      return expr;
+    else
+      return null;
 }
 
 //
