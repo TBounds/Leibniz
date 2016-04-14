@@ -101,8 +101,8 @@ var diffConstRule = {
     pattern: function(target, table) {
       // (table.N.indexOf(table.V.toString()) < 0)
       // smatch check for a number or check if the input contains the var
-    return smatch('DERIV', 'E?', 'V?') && (typeof table.E === "number" ||
-      (table.E.indexOf(table.V.toString()) > 0));
+    return smatch(['DERIV', 'E?', 'V?'], target, table) && (typeof table.E === "number" ||
+      (table.E.indexOf(table.V.toString()) >0));
     },
     transform: function(table) {
         return 0;
@@ -262,10 +262,27 @@ function tryAllRules(expr) {
     var rules = [
         diffPowerRule,
         diffXRule,
-        // ... your code here ...
+        diffConstRule,
+        diffProductRule,
+        diffPowerRule,
+        expt0Rule,
+        expt1Rule,
+        unityRule,
+        time0Rule,
+        foldBinopRule,
+        foldCoeff1Rule
     ];
-    // ... your code here ...
-    return null;
+    
+    var anyFired = false;
+    rules.forEach((function(rule) {
+      var newExpr = tryRule(rule, expr);
+      if(newExpr !== null){
+        expr = newExpr;
+        anyFired = true;
+      }
+    });
+    
+    return anyFired ? expr : null;
 }
 
 //
