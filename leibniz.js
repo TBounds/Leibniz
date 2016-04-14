@@ -102,7 +102,7 @@ var diffConstRule = {
       // (table.N.indexOf(table.V.toString()) < 0)
       // smatch check for a number or check if the input contains the var
     return smatch(['DERIV', 'E?', 'V?'], target, table) && (typeof table.E === "number" ||
-      (table.E.indexOf(table.V.toString()) >0));
+      (table.E.indexOf(table.V.toString()) < 0));
     },
     transform: function(table) {
         return 0;
