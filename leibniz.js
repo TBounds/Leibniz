@@ -262,27 +262,10 @@ function tryAllRules(expr) {
     var rules = [
         diffPowerRule,
         diffXRule,
-        diffConstRule,
-        diffProductRule,
-        diffPowerRule,
-        expt0Rule,
-        expt1Rule,
-        unityRule,
-        time0Rule,
-        foldBinopRule,
-        foldCoeff1Rule
+        // ... your code here ...
     ];
-    
-    var anyFired = false;
-    rules.forEach((function(rule) {
-      var newExpr = tryRule(rule, expr);
-      if(newExpr !== null){
-        expr = newExpr;
-        anyFired = true;
-      }
-    });
-    
-    return anyFired ? expr : null;
+    // ... your code here ...
+    return null;
 }
 
 //
