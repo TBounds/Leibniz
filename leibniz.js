@@ -274,7 +274,7 @@ function tryAllRules(expr) {
         foldCoeff1Rule
     ];
     
-    rules.forEach((function(rule) {
+    rules.forEach(function(rule) {
       var newExpr = tryRule(rule, expr);
       if(newExpr !== null){
         expr = newExpr;
