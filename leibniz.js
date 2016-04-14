@@ -269,7 +269,7 @@ function tryAllRules(expr) {
         expt0Rule,
         expt1Rule,
         unityRule,
-        time0Rule,
+        times0Rule,
         foldBinopRule,
         foldCoeff1Rule
     ];
