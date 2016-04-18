@@ -94,22 +94,6 @@ var diffSubtractRule = {
 };
 
 //
-// d/dt C = 0   (C does not depend on t)
-//
-var diffConstRule = {
-    pattern: function(target, table) {
-      // (table.N.indexOf(table.V.toString()) < 0)
-      // smatch check for a number or check if the input contains the var
-    return smatch(['DERIV', 'E?', 'V?'], target, table) && (typeof table.E === "number" ||
-      (table.E.indexOf(table.V.toString()) < 0));
-    },
-    transform: function(table) {
-        return 0;
-    },
-    label: "diffConstRule"
-};
-
-//
 // (u v)' = uv' + vu'
 //
 var diffProductRule = {
@@ -252,6 +236,21 @@ function tryRule(rule, expr) {
 }
 
 //
+// d/dt C = 0   (C does not depend on t)
+//
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
+var diffConstRule = {
+    pattern: function(target, table) {
+      return smatch(['DERIV', 'E?', 'V?'], target, table) && 
+      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
+    },
+    transform: function(table) {
+        return 0;
+    },
+    label: "diffConstRule"
+};
+
+//
 // Try transforming the given expression using all the rules.
 // If any rules fire, we return the new transformed expression;
 // Otherwise, null is returned.
@@ -261,16 +260,17 @@ function tryAllRules(expr) {
   
     var anyFired = false;
     var rules = [
-        diffPowerRule,
-        diffXRule,
-        diffConstRule,
+        diffSumRule,
         diffProductRule,
         diffPowerRule,
+        diffXRule,
+        diffSubtractRule,
+        diffConstRule,
         expt0Rule,
-        expt1Rule,
-        unityRule,
+        expt1Rule,       
         times0Rule,
         foldBinopRule,
+        unityRule,     
         foldCoeff1Rule
     ];
     
