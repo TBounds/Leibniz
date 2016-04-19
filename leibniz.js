@@ -98,12 +98,13 @@ var diffSubtractRule = {
 };
 
 //
-// d/dt C = 1   (C does not depend on t)
+// d/dt C = 0   (C does not depend on t)
 //
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var diffConstRule = {
     pattern: function(target, table) {
-        return smatch(['DERIV', 'N?', 'V?'], target, table) &&
-            (typeof table.N === "number" ||  (table.N.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
+      return smatch(['DERIV', 'E?', 'V?'], target, table) && 
+      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
     },
     transform: function(table) {
         return 0;
@@ -260,8 +261,6 @@ function tryRule(rule, expr) {
 //
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 function tryAllRules(expr) {
-  
-    var anyFired = false;
     var rules = [
         diffSumRule,
         diffProductRule,
@@ -270,25 +269,20 @@ function tryAllRules(expr) {
         diffSubtractRule,
         diffConstRule,
         expt0Rule,
-        expt1Rule,       
+        expt1Rule,
         times0Rule,
         foldBinopRule,
-        unityRule,     
+        unityRule,
         foldCoeff1Rule
+
+        // ... your code here ...
     ];
-    
-    rules.forEach(function(rule) {
-      var newExpr = tryRule(rule, expr);
-      if(newExpr !== null){
-        expr = newExpr;
-        anyFired = true;
-      }
-    });
-    
-    if(anyFired)
-      return expr;
-    else
-      return null;
+    // ... your code here ...
+    while(rules.length > 0){
+        var newExpr = tryRule(rules.shift(), expr);
+        if(newExpr != null) return newExpr;
+    }
+    return null;
 }
 
 //
