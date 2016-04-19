@@ -98,13 +98,12 @@ var diffSubtractRule = {
 };
 
 //
-// d/dt C = 0   (C does not depend on t)
+// d/dt C = 1   (C does not depend on t)
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var diffConstRule = {
     pattern: function(target, table) {
-      return smatch(['DERIV', 'E?', 'V?'], target, table) && 
-      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
+        return smatch(['DERIV', 'N?', 'V?'], target, table) &&
+            (typeof table.N === "number" ||  (table.N.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
     },
     transform: function(table) {
         return 0;
