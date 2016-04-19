@@ -1,2 +1,25 @@
 Name: Tyler Bounds
 Email: tyler.bounds@wsu.edu
+
+Description:
+    This program can differentiate as well as simplify algebraic expressions utilizing
+    pattern matching. This program creates objects which store the information of the
+    matches and then utilizes its other functions to compute the symbolic derivatives
+    of the functions with the appropiate rules (the other functions).
+
+Files:
+leibniz.lisp
+ltest.lisp
+test.txt
+00-readme.t
+01-run.t
+.gitignore
+.gitlab-ci.yml
+.proverc
+README
+leibniz.js
+package.json
+parse.js
+skeleton.html
+test.js
+unparse.js
