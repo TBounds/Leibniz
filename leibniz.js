@@ -99,7 +99,7 @@ var diffSubtractRule = {
 var diffConstRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', 'E?', 'V?'], target, table) && 
-      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
+      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0));
     },
     transform: function(table) {
         return 0;
@@ -251,7 +251,6 @@ function tryRule(rule, expr) {
 //
 function tryAllRules(expr) {
   
-    var anyFired = false;
     var rules = [
         diffSumRule,
         diffProductRule,
@@ -267,14 +266,17 @@ function tryAllRules(expr) {
         foldCoeff1Rule
     ];
     
+    var anyFired;
     rules.forEach(function(rule) {
       var newExpr = tryRule(rule, expr);
-      if(newExpr !== null)
+      if(newExpr !== null){
+        expr = newExpr;
         anyFired = true;
+      }
     });
     
     if(anyFired)
-      return newExpr;
+      return expr;
     else
       return null;
 }
