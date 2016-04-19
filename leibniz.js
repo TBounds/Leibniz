@@ -41,7 +41,6 @@ function smatch(pattern, target, table) {
 //
 // d/dx u(x)^ n = n * u(x)^n-1 * d/dx u(x)
 //
-// GIVEN
 var diffPowerRule = {
     pattern : function(target, table) {
         return smatch(['DERIV', ['^', 'E?', 'N?'], 'V?'], target, table) &&
@@ -57,7 +56,6 @@ var diffPowerRule = {
 //
 //  d/dt t = 1
 //
-// GIVEN
 var diffXRule = {
     pattern : function(target, table) {
         return smatch(['DERIV', 'E?', 'V?'], target, table) &&
@@ -72,7 +70,6 @@ var diffXRule = {
 //
 // (u + v)' = u' + v'
 //
-// CHECKED
 var diffSumRule = {
     pattern: function(target, table) {
         return smatch(['DERIV', ['+', 'U?', 'V?'], 'X?'], target, table);
@@ -86,7 +83,6 @@ var diffSumRule = {
 //
 // (u - v)' = u' - v'
 //
-// CHECKED
 var diffSubtractRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', ['-', 'U?', 'V?'], 'X?'], target, table);
@@ -100,7 +96,6 @@ var diffSubtractRule = {
 //
 // d/dt C = 0   (C does not depend on t)
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 var diffConstRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', 'E?', 'V?'], target, table) && 
@@ -115,7 +110,6 @@ var diffConstRule = {
 //
 // (u v)' = uv' + vu'
 //
-// CHECKED
 var diffProductRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', ['*', 'U?', 'V?'], 'X?'], target, table);
@@ -129,7 +123,6 @@ var diffProductRule = {
 //
 // 3 + 4 = 7   (evaluate constant binary expressions)
 //
-// CHECKED
 var foldBinopRule = {
     pattern: function(target, table) {
       return smatch(['O?', 'N1?', 'N2?'], target, table) &&
@@ -153,7 +146,6 @@ var foldBinopRule = {
 //
 // 3*(2*E) = 6*E  : [*, a, [*, b, e]] => [*, (a*b), e]
 //
-// CHECKED
 var foldCoeff1Rule = {
     pattern: function(target, table) {
       return smatch(['*', 'N1?', ['*', 'N2?', 'E?']], target, table) &&
@@ -168,7 +160,6 @@ var foldCoeff1Rule = {
 //
 //  x^0 = 1
 //
-// CHECKED
 var expt0Rule = {
     pattern: function(target, table) {
       return smatch(['^', 'X?', 'N?'], target, table) &&
@@ -183,7 +174,6 @@ var expt0Rule = {
 //
 //  x^1 = x
 //
-// CHECKED
 var expt1Rule = {
     pattern: function(target, table) {
       return smatch(['^', 'X?', 'N?'], target, table) &&
@@ -259,8 +249,9 @@ function tryRule(rule, expr) {
 // If any rules fire, we return the new transformed expression;
 // Otherwise, null is returned.
 //
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
 function tryAllRules(expr) {
+  
+    var anyFired = false;
     var rules = [
         diffSumRule,
         diffProductRule,
@@ -274,15 +265,18 @@ function tryAllRules(expr) {
         foldBinopRule,
         unityRule,
         foldCoeff1Rule
-
-        // ... your code here ...
     ];
-    // ... your code here ...
-    while(rules.length > 0){
-        var newExpr = tryRule(rules.shift(), expr);
-        if(newExpr != null) return newExpr;
-    }
-    return null;
+    
+    rules.forEach(function(rule) {
+      var newExpr = tryRule(rule, expr);
+      if(newExpr !== null)
+        anyFired = true;
+    });
+    
+    if(anyFired)
+      return newExpr;
+    else
+      return null;
 }
 
 //
@@ -293,11 +287,6 @@ function reduceExpr(expr) {
     var e = tryAllRules(expr);
     return (e != null) ? reduceExpr(e) : expr;
 }
-
-//if (diffPowerRule.pattern(['DERIV', ['^', 'X', 3], 'X'], table)) {
-//     var f = diffPowerRule.transform(table);
-//     console.log(f);
-// }
 
 //
 // Node module exports.
