@@ -267,7 +267,7 @@ function tryAllRules(expr) {
   ];
   
   while(rules.length > 0){
-    var newExpr = tryRyle(rules.pop(), expr);
+    var newExpr = tryRule(rules.pop(), expr);
     if(newExpr !== null) return newExpr;
   }
   
