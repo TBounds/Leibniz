@@ -41,6 +41,7 @@ function smatch(pattern, target, table) {
 //
 // d/dx u(x)^ n = n * u(x)^n-1 * d/dx u(x)
 //
+// GIVEN
 var diffPowerRule = {
     pattern : function(target, table) {
         return smatch(['DERIV', ['^', 'E?', 'N?'], 'V?'], target, table) &&
@@ -56,6 +57,7 @@ var diffPowerRule = {
 //
 //  d/dt t = 1
 //
+// GIVEN
 var diffXRule = {
     pattern : function(target, table) {
         return smatch(['DERIV', 'E?', 'V?'], target, table) &&
@@ -70,6 +72,7 @@ var diffXRule = {
 //
 // (u + v)' = u' + v'
 //
+// CHECKED
 var diffSumRule = {
     pattern: function(target, table) {
         return smatch(['DERIV', ['+', 'U?', 'V?'], 'X?'], target, table);
@@ -83,6 +86,7 @@ var diffSumRule = {
 //
 // (u - v)' = u' - v'
 //
+// CHECKED
 var diffSubtractRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', ['-', 'U?', 'V?'], 'X?'], target, table);
@@ -91,6 +95,21 @@ var diffSubtractRule = {
         return ['-', ['DERIV', table.U, table.X], ['DERIV', table.V, table.X]];
     },
     label: "diffSubtractRule"
+};
+
+//
+// d/dt C = 0   (C does not depend on t)
+//
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
+var diffConstRule = {
+    pattern: function(target, table) {
+      return smatch(['DERIV', 'E?', 'V?'], target, table) && 
+      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
+    },
+    transform: function(table) {
+        return 0;
+    },
+    label: "diffConstRule"
 };
 
 //
@@ -134,6 +153,7 @@ var foldBinopRule = {
 //
 // 3*(2*E) = 6*E  : [*, a, [*, b, e]] => [*, (a*b), e]
 //
+// CHECKED
 var foldCoeff1Rule = {
     pattern: function(target, table) {
       return smatch(['*', 'N1?', ['*', 'N2?', 'E?']], target, table) &&
@@ -148,6 +168,7 @@ var foldCoeff1Rule = {
 //
 //  x^0 = 1
 //
+// CHECKED
 var expt0Rule = {
     pattern: function(target, table) {
       return smatch(['^', 'X?', 'N?'], target, table) &&
@@ -162,6 +183,7 @@ var expt0Rule = {
 //
 //  x^1 = x
 //
+// CHECKED
 var expt1Rule = {
     pattern: function(target, table) {
       return smatch(['^', 'X?', 'N?'], target, table) &&
@@ -231,21 +253,6 @@ function tryRule(rule, expr) {
         return anyFire ? newExpr : null;
     }
 }
-
-//
-// d/dt C = 0   (C does not depend on t)
-//
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX//
-var diffConstRule = {
-    pattern: function(target, table) {
-      return smatch(['DERIV', 'E?', 'V?'], target, table) && 
-      (typeof table.E === "number" || (table.E.indexOf(table.V.toString()) < 0)) && table.V.length === 1;
-    },
-    transform: function(table) {
-        return 0;
-    },
-    label: "diffConstRule"
-};
 
 //
 // Try transforming the given expression using all the rules.
