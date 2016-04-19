@@ -251,31 +251,28 @@ function tryRule(rule, expr) {
 //
 function tryAllRules(expr) {
   
-    var rules = [
-        diffSumRule,
-        diffProductRule,
-        diffPowerRule,
-        diffXRule,
-        diffSubtractRule,
-        diffConstRule,
-        expt0Rule,
-        expt1Rule,
-        times0Rule,
-        foldBinopRule,
-        unityRule,
-        foldCoeff1Rule
-    ];
-    
-    var anyFired;
-    rules.forEach(function(rule) {
-      var newExpr = tryRule(rule, expr);
-      if(newExpr !== null){
-        expr = newExpr;
-        anyFired = true;
-      }
-    });
-    
-    return anyFired ? expr : null;
+  var rules = [
+      foldCoeff1Rule,
+      unityRule,
+      foldBinopRule,
+      times0Rule,
+      expt1Rule,
+      expt0Rule,
+      diffConstRule,
+      diffSubtractRule,
+      diffXRule,
+      diffPowerRule,
+      diffProductRule,
+      diffSumRule
+  ];
+  
+  while(rules.length > 0){
+    var newExpr = tryRyle(rules.pop(), expr);
+    if(newExpr !== null) return newExpr;
+  }
+  
+  return null;
+  
 }
 
 //
