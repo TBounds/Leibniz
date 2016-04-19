@@ -275,10 +275,7 @@ function tryAllRules(expr) {
       }
     });
     
-    if(anyFired)
-      return expr;
-    else
-      return null;
+    return anyFire ? expr : null;
 }
 
 //
