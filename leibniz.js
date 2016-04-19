@@ -275,7 +275,7 @@ function tryAllRules(expr) {
       }
     });
     
-    return anyFire ? expr : null;
+    return anyFired ? expr : null;
 }
 
 //
