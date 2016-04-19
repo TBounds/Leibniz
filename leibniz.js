@@ -96,6 +96,7 @@ var diffSubtractRule = {
 //
 // (u v)' = uv' + vu'
 //
+// CHECKED
 var diffProductRule = {
     pattern: function(target, table) {
       return smatch(['DERIV', ['*', 'U?', 'V?'], 'X?'], target, table);
@@ -109,6 +110,7 @@ var diffProductRule = {
 //
 // 3 + 4 = 7   (evaluate constant binary expressions)
 //
+// CHECKED
 var foldBinopRule = {
     pattern: function(target, table) {
       return smatch(['O?', 'N1?', 'N2?'], target, table) &&
@@ -134,16 +136,11 @@ var foldBinopRule = {
 //
 var foldCoeff1Rule = {
     pattern: function(target, table) {
-      return smatch(['*', 'N?', ['*', 'E1?', 'E2?']], target, table) &&
-        typeof table.N === "number" && ((typeof table.E1 === "number" &&
-        typeof table.E2 === "string") || (typeof table.E1 === "string" &&
-        typeof table.E2 === "number"));
+      return smatch(['*', 'N1?', ['*', 'N2?', 'E?']], target, table) &&
+        typeof table.N1 === "number" && typeof table.N2 === "number"; 
     },
     transform: function(table) {
-      if(typeof table.E1 === "number")
-        return ['*', (table.N * table.E1), table.E2];
-      else if(typeof table.E2 === "number")
-        return ['*', (table.N * table.E2), table.E1];
+        return ['*', (table.N1 * table.N2), table.E];
     },
     label: "foldCoeff1Rule"
 };
@@ -182,10 +179,8 @@ var expt1Rule = {
 var unityRule = {
     pattern: function(target, table) {
       return (smatch(['O?', 'E?', 'N?'], target, table) && 
-        table.O === "+" && table.E === 0 && typeof table.N !== "number" ||
-        table.O === "+" && typeof table.E !== "number" && table.N === 0 ||
-        table.O === "*" && table.E === 1 && typeof table.N !== "number" ||
-        table.O === "*" && typeof table.E !== "number" && table.N === 1;
+      ((table.O === '*' && (table.E === 1 || table.N === 1)) ||
+       (table.O === '+' && (table.E === 0 || table.N === 0))))      
     },
     transform: function(table) {
       if(typeof table.E !== "number")
@@ -326,6 +321,3 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     exports.tryAllRules = tryAllRules;
     exports.reduceExpr = reduceExpr;
 }
-
-var expr = ['DERIV', ['+', ['^', 'x', 2], ['*', 2, 'x'] ], 'x'];
-console.log(reducedExpr(expr));
