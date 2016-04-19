@@ -182,8 +182,10 @@ var expt1Rule = {
 var unityRule = {
     pattern: function(target, table) {
       return (smatch(['O?', 'E?', 'N?'], target, table) && 
-      ((table.O === '*' && (table.E === 1 || table.N === 1)) ||
-       (table.O === '+' && (table.E === 0 || table.N === 0))))      
+        table.O === "+" && table.E === 0 && typeof table.N !== "number" ||
+        table.O === "+" && typeof table.E !== "number" && table.N === 0 ||
+        table.O === "*" && table.E === 1 && typeof table.N !== "number" ||
+        table.O === "*" && typeof table.E !== "number" && table.N === 1;
     },
     transform: function(table) {
       if(typeof table.E !== "number")
@@ -324,3 +326,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     exports.tryAllRules = tryAllRules;
     exports.reduceExpr = reduceExpr;
 }
+
+var expr = ['DERIV', ['+', ['^', 'x', 2], ['*', 2, 'x'] ], 'x'];
+console.log(reducedExpr(expr));
