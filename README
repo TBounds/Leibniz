@@ -2,7 +2,7 @@ Name: Tyler Bounds
 Email: tyler.bounds@wsu.edu
 
 Description:
-    This program can differentiate as well as simplify algebraic expressions utilizing
+    This program can differentiate and simplify algebraic expressions utilizing
     pattern matching. This program creates objects which store the information of the
     matches and then utilizes its other functions to compute the symbolic derivatives
     of the functions with the appropiate rules (the other functions).
